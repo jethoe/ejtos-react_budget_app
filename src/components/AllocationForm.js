@@ -1,16 +1,20 @@
 import React, { useContext, useState } from 'react';
 import { AppContext } from '../context/AppContext';
 const AllocationForm = (props) => {
-    const { dispatch,currency,remaining  } = useContext(AppContext);
+    const { budget,dispatch,currency,remaining  } = useContext(AppContext);
     const [name, setName] = useState('');
     const [cost, setCost] = useState('');
     const [action, setAction] = useState('');
     const submitEvent = () => {
-            if(cost > remaining) {
-                alert("The value cannot exceed remaining funds  £"+remaining);
-                setCost("");
-                return;
-            }
+        if(cost === "" || isNaN(cost)){
+            alert("The value is not a valid number!");
+            return;
+        }
+        if(cost > remaining) {
+            alert("The value cannot exceed remaining funds  £"+remaining);
+            setCost("");
+            return;
+        }
         const expense = {
             name: name,
             cost: parseInt(cost),
@@ -27,6 +31,7 @@ const AllocationForm = (props) => {
             });
         }
     };
+
     return (
         <div>
             <div className='row'>
@@ -62,7 +67,8 @@ const AllocationForm = (props) => {
                         id='cost'
                         value={cost}
                         style={{ marginLeft: '2rem' , size: 10}}
-                        onChange={(event) => setCost(event.target.value)}>
+                        onChange={(event) => setCost(event.target.value)}
+                    >
                     </input>
                     <button className="btn btn-primary" onClick={submitEvent} style={{ marginLeft: '2rem' }}>
                         Save
